@@ -1,0 +1,64 @@
+{
+    "name": "@wicle/is",
+    "version": "1.0.0",
+    "description": "JavaScript and TypeScript type testing library uniquely identifying types without overlap.",
+    "type": "module",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        "require": "./dist/index.cjs",
+        "import": "./dist/index.js"
+    },
+    "files": [
+        "dist/*"
+    ],
+    "scripts": {
+        "dev": "pnpm run build --watch",
+        "build": "tsup src/index.ts --format cjs,esm --dts",
+        "lint": "tsc && xo",
+        "clean": "rimraf ./dist ./coverage",
+        "test": "vitest run --coverage",
+        "test:watch": "vitest watch --coverage",
+        "rebuild": "run-s clean build",
+        "prepare-to-commit": "run-s rebuild lint test",
+        "npm-dryrun": "npm publish --dry-run"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/shnam7/wicle-is.git"
+    },
+    "homepage": "https://github.com/shnam7/wicle-is#readme",
+    "bugs": {
+        "url": "https://github.com/shnam7/wicle-is/issues"
+    },
+    "author": "Robin Nam (https://github.com/shnam7)",
+    "license": "MIT",
+    "publishConfig": {
+        "access": "public"
+    },
+    "keywords": [
+        "JavaScript",
+        "typescript",
+        "type",
+        "check",
+        "util",
+        "esm"
+    ],
+    "dependencies": {},
+    "devDependencies": {
+        "@changesets/cli": "^2.27.7",
+        "@vitest/coverage-v8": "^1.6.0",
+        "changesets": "^1.0.2",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^5.0.8",
+        "tsup": "^8.1.0",
+        "typescript": "^5.5.3",
+        "vitest": "^1.6.0",
+        "xo": "^0.58.0"
+    },
+    "engines": {
+        "node": ">=15"
+    },
+    "packageManager": "pnpm@9.4.0+sha512.f549b8a52c9d2b8536762f99c0722205efc5af913e77835dbccc3b0b0b2ca9e7dc8022b78062c17291c48e88749c70ce88eb5a74f1fa8c4bf5e18bb46c8bd83a"
+}
