@@ -1,14 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/naming-convention */
 const _is = (a: any, name: string): boolean => toString.call(a) === '[object ' + name + ']'
 
 /**
  * Collectin of type-checking functions
  */
-export const __is = {
-    Array: Array.isArray ?? ((a: unknown): a is Array<typeof a> => _is(a, 'Array')),
+export const _isCollection = {
+    Array: (a: unknown): a is Array<typeof a> => _is(a, 'Array'),
     Object: (a: unknown): a is Record<string, unknown> => _is(a, 'Object'),
-    // Function: (a: unknown): a is Function => _is(a, 'Function')
-    Function: (a: unknown): a is () => void =>
+    Function: (a: unknown): a is Function =>
         typeof a === 'function' && !/^class\s/.test(Function.prototype.toString.call(a)),
     String: (a: unknown): a is string => _is(a, 'String'),
     Number: (a: unknown): a is number => _is(a, 'Number'),
@@ -24,4 +24,4 @@ export const __is = {
         typeof a === 'function' && /^class\s/.test(Function.prototype.toString.call(a)),
 }
 
-export default __is
+export default _isCollection
