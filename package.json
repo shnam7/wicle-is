@@ -18,7 +18,7 @@
         "build": "tsup src/index.ts --format cjs,esm --dts",
         "lint": "tsc && xo",
         "clean": "rimraf ./dist ./coverage",
-        "test": "vitest run --coverage",
+        "test": "xo && vitest run --coverage",
         "test:watch": "vitest watch --coverage",
         "rebuild": "run-s clean build",
         "prepare-to-commit": "run-s rebuild lint test",
@@ -45,20 +45,19 @@
         "util",
         "esm"
     ],
-    "dependencies": {},
     "devDependencies": {
-        "@changesets/cli": "^2.27.7",
-        "@vitest/coverage-v8": "^2.0.3",
+        "@changesets/cli": "^2.29.4",
+        "@vitest/coverage-v8": "^3.2.1",
         "changesets": "^1.0.2",
         "npm-run-all": "^4.1.5",
         "rimraf": "^6.0.1",
-        "tsup": "^8.2.0",
-        "typescript": "^5.5.3",
-        "vitest": "^2.0.3",
-        "xo": "^0.59.0"
+        "tsup": "^8.5.0",
+        "typescript": "^5.8.3",
+        "vitest": "^3.2.1",
+        "xo": "^1.0.5"
     },
     "engines": {
         "node": ">=15"
     },
-    "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
+    "packageManager": "pnpm@10.11.1"
 }
