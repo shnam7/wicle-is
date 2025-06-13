@@ -347,26 +347,25 @@ test('AsyncFunction', () => {
     expect(is.AsyncFunction(_asyncFunction)).toBeTruthy() // -----> true
 })
 
-test('conditional async call', async ()=>{
+test('conditional async call', async () => {
     let foo
     let result: number
-    type AsyncFunc = ()=>Promise<number>
+    type AsyncFunc = () => Promise<number>
 
-    const f1 = async ()=> new Promise<number>(resolve => {
-        setTimeout(() => {
-            resolve(1)
-        }, 100)
-      
-    })
-    const f2 = () => 1; // This is an async function
+    const f1 = async () =>
+        new Promise<number>(resolve => {
+            setTimeout(() => {
+                resolve(1)
+            }, 100)
+        })
+    const f2 = () => 1 // This is an async function
 
-    async function asyncFunc( func: ()=>Promise<number> | number) {
-         if (is.AsyncFunction(func)) {
-            result = await (func() as Promise<number>);
-                expect(result).toBe(1)
-
+    async function asyncFunc(func: () => Promise<number> | number) {
+        if (is.AsyncFunction(func)) {
+            result = await (func() as Promise<number>)
+            expect(result).toBe(1)
         } else {
-            result = func() as number;
+            result = func() as number
             expect(result).toBe(1)
         }
     }
