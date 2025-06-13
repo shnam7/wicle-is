@@ -1,17 +1,19 @@
-import {type FlatXoConfig} from 'xo';
+import {type FlatXoConfig} from 'xo'
 
 const xoConfig: FlatXoConfig = [
-	{
-		prettier: 'compat',
-		rules: {
-			'capitalized-comments': 0,
-			'unicorn/prevent-abbreviations': 0,
-			'function-paren-newline': 0,
-			'implicit-arrow-linebreak': 0,
-			'@typescript-eslint/no-empty-function': 0,
-			'arrow-body-style': ['error', 'as-needed'],
-		},
-	},
-];
+    {
+        prettier: true,
+        space: 4,
+        rules: {
+            'capitalized-comments': 'off',
+            'unicorn/prevent-abbreviations': 'off',
+            'function-paren-newline': 'off',
+            'implicit-arrow-linebreak': 'off',
+            'arrow-body-style': ['error', 'as-needed'],
+            '@typescript-eslint/no-empty-function': 'off',
+            '@typescript-eslint/no-unsafe-call': 'off',
+        },
+    },
+]
 
-export default xoConfig;
+export default xoConfig

@@ -5,7 +5,7 @@ const _is = (a: any, name: string): boolean =>
 /**
  * Collectin of type-checking functions
  */
-export const _isCollection = {
+const _isCollection = {
     Array: (a: unknown) => _is(a, 'Array'),
     Object: (a: unknown) => _is(a, 'Object'),
     Function: (a: unknown) =>
