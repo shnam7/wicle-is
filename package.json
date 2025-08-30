@@ -1,6 +1,6 @@
 {
     "name": "@wicle/is",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "JavaScript and TypeScript type testing library uniquely identifying types without overlap.",
     "type": "module",
     "main": "./dist/index.cjs",

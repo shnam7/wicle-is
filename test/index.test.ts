@@ -1,5 +1,23 @@
-import {expect, test, describe} from 'vitest'
-import is from '../src/index.js'
+import {expect, test, describe, assert} from 'vitest'
+import is, {
+    isArray,
+    isObject,
+    isFunction,
+    isString,
+    isNumber,
+    isDate,
+    isRegExp,
+    isError,
+    isSymbol,
+    isMap,
+    isWeakMap,
+    isSet,
+    isWeakSet,
+    isClass,
+    isPromise,
+    isAsyncFunction,
+    isGlob,
+} from '../src/index.js'
 
 const _array = []
 const _object = {}
@@ -23,6 +41,28 @@ const _class = class {
 const _classInstance = new _class() // Class instance should be of Object type.
 const _promise = Promise.resolve()
 const _asyncFunction = async () => 1
+
+describe('should import type checkers individually', () => {
+    test('isArray', () => {
+        assert(is.isArray === isArray)
+        assert(is.isObject === isObject)
+        assert(is.isFunction === isFunction)
+        assert(is.isString === isString)
+        assert(is.isNumber === isNumber)
+        assert(is.isDate === isDate)
+        assert(is.isRegExp === isRegExp)
+        assert(is.isError === isError)
+        assert(is.isSymbol === isSymbol)
+        assert(is.isMap === isMap)
+        assert(is.isWeakMap === isWeakMap)
+        assert(is.isSet === isSet)
+        assert(is.isWeakSet === isWeakSet)
+        assert(is.isClass === isClass)
+        assert(is.isPromise === isPromise)
+        assert(is.isAsyncFunction === isAsyncFunction)
+        assert(is.isGlob === isGlob)
+    })
+})
 
 describe('is', () => {
     test('Array', () => {
