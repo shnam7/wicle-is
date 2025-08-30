@@ -1,32 +1,36 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+export type Glob = string | readonly string[]
+
 const _is = (a: any, name: string): boolean =>
     Object.prototype.toString.call(a) === '[object ' + name + ']'
 
 /**
  * Collectin of type-checking functions
  */
-const _isCollection = {
-    Array: (a: unknown) => _is(a, 'Array'),
-    Object: (a: unknown) => _is(a, 'Object'),
-    Function: (a: unknown) =>
+export const types = {
+    isArray: (a: unknown) => _is(a, 'Array'),
+    isObject: (a: unknown) => _is(a, 'Object'),
+    isFunction: (a: unknown) =>
         typeof a === 'function' && !/^class\s/.test(Function.prototype.toString.call(a)),
-    String: (a: unknown) => _is(a, 'String'),
-    Number: (a: unknown) => _is(a, 'Number'),
-    Date: (a: unknown) => _is(a, 'Date'),
-    RegExp: (a: unknown) => _is(a, 'RegExp'),
-    Error: (a: unknown) => _is(a, 'Error'),
-    Symbol: (a: unknown) => _is(a, 'Symbol'),
-    Map: (a: unknown) => _is(a, 'Map'),
-    WeakMap: (a: unknown) => _is(a, 'WeakMap'),
-    Set: (a: unknown) => _is(a, 'Set'),
-    WeakSet: (a: unknown) => _is(a, 'WeakSet'),
-    Class: (a: unknown) =>
+    isString: (a: unknown) => _is(a, 'String'),
+    isNumber: (a: unknown) => _is(a, 'Number'),
+    isDate: (a: unknown) => _is(a, 'Date'),
+    isRegExp: (a: unknown) => _is(a, 'RegExp'),
+    isError: (a: unknown) => _is(a, 'Error'),
+    isSymbol: (a: unknown) => _is(a, 'Symbol'),
+    isMap: (a: unknown) => _is(a, 'Map'),
+    isWeakMap: (a: unknown) => _is(a, 'WeakMap'),
+    isSet: (a: unknown) => _is(a, 'Set'),
+    isWeakSet: (a: unknown) => _is(a, 'WeakSet'),
+    isClass: (a: unknown) =>
         typeof a === 'function' && /^class\s/.test(Function.prototype.toString.call(a)),
 
-    Promise: (a: unknown) =>
+    isPromise: (a: unknown) =>
         typeof a === 'object' && a !== null && typeof (a as Promise<unknown>).then === 'function',
-    AsyncFunction: (a: unknown) =>
+    isAsyncFunction: (a: unknown) =>
         typeof a === 'function' && /^async\s/.test(Function.prototype.toString.call(a)),
+    isGlob: (value: unknown): value is string =>
+        typeof value === 'string' ||
+        (Array.isArray(value) && value.every(item => typeof item === 'string')),
 }
 
-export default _isCollection
+export default types
