@@ -1,7 +1,19 @@
+# Custom temporary files
 /__*/
-.vscode/
+
+# Dependencies
 node_modules/
-*.map
-.turbo/
-coverage/
+
+# Build outputs
 dist/
+coverage/
+.turbo/
+
+# TypeScript
+*.tsbuildinfo
+
+# Editors/OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

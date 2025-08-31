@@ -1,54 +1,59 @@
 {
     "name": "@wicle/is",
     "version": "2.0.1",
-    "description": "JavaScript and TypeScript type testing library uniquely identifying types without overlap.",
-    "type": "module",
-    "main": "./dist/index.cjs",
-    "module": "./dist/index.js",
-    "types": "./dist/index.d.ts",
-    "exports": {
-        "require": "./dist/index.cjs",
-        "import": "./dist/index.js"
-    },
-    "files": [
-        "dist/*"
+    "description": "Runtime type checking library for JavaScript and TypeScript with precise type identification",
+    "keywords": [
+        "esm",
+        "javascript",
+        "predicate",
+        "runtime-type",
+        "type-check",
+        "type-guard",
+        "type-is",
+        "typescript",
+        "typeof",
+        "validation"
     ],
-    "scripts": {
-        "dev": "pnpm run build --watch",
-        "build": "tsdown src/index.ts --format cjs,esm --dts",
-        "lint": "tsc && xo",
-        "clean": "rimraf ./dist ./coverage",
-        "test": "xo && vitest run --coverage",
-        "test:watch": "vitest watch --coverage",
-        "rebuild": "run-s clean build",
-        "prepare-to-commit": "run-s rebuild lint test",
-        "npm-dryrun": "npm publish --dry-run"
+    "homepage": "https://github.com/shnam7/wicle-is#readme",
+    "bugs": {
+        "url": "https://github.com/shnam7/wicle-is/issues"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/shnam7/wicle-is.git"
     },
-    "homepage": "https://github.com/shnam7/wicle-is#readme",
-    "bugs": {
-        "url": "https://github.com/shnam7/wicle-is/issues"
-    },
-    "author": "Robin Nam (https://github.com/shnam7)",
     "license": "MIT",
-    "publishConfig": {
-        "access": "public"
+    "author": "Robin Nam (https://github.com/shnam7)",
+    "type": "module",
+    "sideEffects": false,
+    "exports": {
+        "default": "./dist/index.js",
+        "import": "./dist/index.js",
+        "require": "./dist/index.cjs"
     },
-    "keywords": [
-        "JavaScript",
-        "typescript",
-        "type",
-        "check",
-        "util",
-        "esm"
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+        "dist"
     ],
+    "scripts": {
+        "build": "tsdown src/index.ts --format cjs,esm --dts",
+        "clean": "rimraf ./dist ./coverage",
+        "dev": "pnpm run build --watch",
+        "lint": "tsc --noEmit && xo",
+        "changeset": "changeset",
+        "version": "changeset version",
+        "release": "pnpm run build && changeset publish",
+        "npm-dryrun": "npm publish --dry-run",
+        "prepare-to-commit": "run-s rebuild lint test",
+        "rebuild": "run-s clean build",
+        "test": "vitest run --coverage",
+        "test:watch": "vitest watch --coverage"
+    },
     "devDependencies": {
         "@changesets/cli": "^2.29.6",
         "@vitest/coverage-v8": "^3.2.4",
-        "changesets": "^1.0.2",
         "npm-run-all": "^4.1.5",
         "prettier": "^3.6.2",
         "rimraf": "^6.0.1",
@@ -58,7 +63,11 @@
         "xo": "^1.2.2"
     },
     "engines": {
-        "node": ">=15"
+        "node": ">=18"
+    },
+    "publishConfig": {
+        "access": "public",
+        "provenance": true
     },
     "packageManager": "pnpm@10.15.0"
 }
