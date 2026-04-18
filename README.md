@@ -1,132 +1,129 @@
 # @wicle/is
 
-JavaScript and TypeScript type testing library uniquely identifying types without overlap.
+Runtime type-checking library for JavaScript and TypeScript with precise, non-overlapping type identification.
 
-It does type testing for the following types:
-
-- Array
-- Object
-- Function
-- String
-- Number
-- Date
-- RegExp
-- Error
-- Symbol
-- Map
-- WeakMap
-- Set
-- WeakSet
-- Class
-- Promise
-- AsyncFunction
-- Glob
-
-If a variable is one of the above types, it means it is not of any other types above.
-For example, if a variable is of type Function, then it is not of type Object. A class instance is of type Object,
-but not of type Class or Function, etc.
+Each type check is mutually exclusive: if a value is identified as one type, it will not match any other type in this library. For example, a class constructor returns `true` for `isClass` but `false` for `isFunction` and `isObject`.
 
 ## Installation
 
 ```bash
 npm install @wicle/is
-
-# or
-yarn add @wicle/is
-
 # or
 pnpm add @wicle/is
+# or
+yarn add @wicle/is
 ```
 
 ## Usage
 
-```js
+### Default import
+
+```ts
 import is from '@wicle/is'
 
-function processValue(arg) {
-    if (is.isFunction(arg)) {
-        // Handle function
-        arg()
-    } else if (is.isClass(arg)) {
-        // Handle class constructor
-        const instance = new arg()
-    } else if (is.isString(arg)) {
-        // Handle string
-        console.log(arg.toUpperCase())
-    }
-    // ... handle other types
-}
+is.isString('hello')   // true
+is.isNumber(42)        // true
+is.isArray([1, 2, 3])  // true
+```
+
+### Individual imports
+
+```ts
+import {isString, isNumber, isArray} from '@wicle/is'
+
+isString('hello')   // true
+isNumber(42)        // true
+isArray([1, 2, 3])  // true
 ```
 
 ## API
 
-All functions return `true` if the value matches the specified type, `false` otherwise.
+All functions return `true` if the value matches the type, `false` otherwise. Each function is a TypeScript type guard that narrows the type in the enclosing scope.
 
-- `is.isArray(arg)` - Tests if value is an Array
-- `is.isObject(arg)` - Tests if value is a plain Object
-- `is.isFunction(arg)` - Tests if value is a Function (excluding classes and async functions)
-- `is.isString(arg)` - Tests if value is a String
-- `is.isNumber(arg)` - Tests if value is a Number
-- `is.isDate(arg)` - Tests if value is a Date
-- `is.isRegExp(arg)` - Tests if value is a RegExp
-- `is.isError(arg)` - Tests if value is an Error
-- `is.isSymbol(arg)` - Tests if value is a Symbol
-- `is.isMap(arg)` - Tests if value is a Map
-- `is.isWeakMap(arg)` - Tests if value is a WeakMap
-- `is.isSet(arg)` - Tests if value is a Set
-- `is.isWeakSet(arg)` - Tests if value is a WeakSet
-- `is.isClass(arg)` - Tests if value is a Class constructor
-- `is.isPromise(arg)` - Tests if value is a Promise-like object
-- `is.isAsyncFunction(arg)` - Tests if value is an async function
-- `is.isGlob(arg)` - Tests if value is a glob pattern (string or array of strings)
+| Function | TypeScript narrowed type | Description |
+|---|---|---|
+| `isArray(a)` | `unknown[]` | Array |
+| `isObject(a)` | `Record<string, unknown>` | Plain object or class instance |
+| `isFunction(a)` | `(...args: unknown[]) => unknown` | Regular or async function (not a class) |
+| `isString(a)` | `string` | String |
+| `isNumber(a)` | `number` | Number |
+| `isDate(a)` | `Date` | Date |
+| `isRegExp(a)` | `RegExp` | RegExp |
+| `isError(a)` | `Error` | Error |
+| `isSymbol(a)` | `symbol` | Symbol |
+| `isMap(a)` | `Map<unknown, unknown>` | Map |
+| `isWeakMap(a)` | `WeakMap<WeakKey, unknown>` | WeakMap |
+| `isSet(a)` | `Set<unknown>` | Set |
+| `isWeakSet(a)` | `WeakSet<WeakKey>` | WeakSet |
+| `isClass(a)` | `new (...args: unknown[]) => unknown` | Class constructor |
+| `isPromise(a)` | — | Thenable object (duck-typed) |
+| `isAsyncFunction(a)` | `(...args: unknown[]) => Promise<unknown>` | Async function |
+| `isGlob(a)` | `Glob` | String or readonly string array |
 
-## Important Notes
+The exported `Glob` type is `string | readonly string[]`.
 
-### Class vs Object vs Function
+## Type narrowing
 
-This library makes clear distinctions between:
-
-- **Class**: A class constructor/definition
-- **Function**: A regular function (not a class or async function)
-- **Object**: A plain object or class instance
-
-```js
-class MyClass {}
-const myFunction = () => {}
-const myObject = {}
-const myInstance = new MyClass()
-
-is.isClass(MyClass) // true
-is.isFunction(MyClass) // false
-is.isObject(MyClass) // false
-
-is.isFunction(myFunction) // true
-is.isClass(myFunction) // false
-is.isObject(myFunction) // false
-
-is.isObject(myObject) // true
-is.isClass(myObject) // false
-is.isFunction(myObject) // false
-
-is.isObject(myInstance) // true (class instances are objects)
-is.isClass(myInstance) // false
-is.isFunction(myInstance) // false
-```
-
-### Type Safety
-
-All functions provide TypeScript type guards for better type safety:
-
-```typescript
-function processValue(value: unknown) {
-    if (is.isString(value)) {
-        // TypeScript now knows 'value' is a string
-        console.log(value.toUpperCase())
-    }
-
-    if (is.isArray(value)) {
-        // TypeScript now knows 'value' is an array
-        console.log(value.length)
+```ts
+function process(value: unknown) {
+    if (isString(value)) {
+        console.log(value.toUpperCase()) // value: string
+    } else if (isArray(value)) {
+        console.log(value.length)        // value: unknown[]
+    } else if (isFunction(value)) {
+        value()                          // value: (...args: unknown[]) => unknown
+    } else if (isClass(value)) {
+        new value()                      // value: new (...args: unknown[]) => unknown
     }
 }
 ```
+
+## Type overlap behaviour
+
+### `isFunction` vs `isClass` vs `isAsyncFunction`
+
+`isFunction` returns `true` for regular and async functions, but `false` for class constructors. Use `isClass` to check for classes specifically, or `isAsyncFunction` to check exclusively for async functions.
+
+```ts
+class MyClass {}
+const fn = () => {}
+const asyncFn = async () => {}
+
+isClass(MyClass)         // true
+isFunction(MyClass)      // false
+
+isFunction(fn)           // true
+isAsyncFunction(fn)      // false
+
+isFunction(asyncFn)      // true  — async functions are still functions
+isAsyncFunction(asyncFn) // true
+isClass(asyncFn)         // false
+```
+
+### `isObject` and class instances
+
+`isObject` returns `true` for both plain objects and class instances. It returns `false` for arrays, functions, classes, and primitives.
+
+```ts
+class MyClass {}
+const instance = new MyClass()
+
+isObject({})         // true
+isObject(instance)   // true
+isObject([])         // false
+isObject(MyClass)    // false
+```
+
+### `isPromise`
+
+`isPromise` uses duck-typing: it returns `true` for any non-null object with a `.then` method (i.e., a thenable). This matches native `Promise`, resolved values from other libraries, and custom thenable objects.
+
+```ts
+isPromise(Promise.resolve(1))  // true
+isPromise({then: () => {}})    // true
+isPromise(async () => {})      // false — async functions are not thenables
+```
+
+## License
+
+MIT

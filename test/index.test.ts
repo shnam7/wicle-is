@@ -19,13 +19,13 @@ import is, {
     isGlob,
 } from '../src/index.js'
 
-const _array = []
+const _array: unknown[] = []
 const _object = {}
-const _function = () => {}
+const _function = () => undefined
 const _string = ''
 const _number = 123
 const _date = new Date()
-const _regexp = /abc/g
+const _regexp = /abc/gu
 const _error = new Error('error')
 const _symbol = Symbol('abc')
 const _map = new Map()
@@ -33,12 +33,9 @@ const _weakmap = new WeakMap()
 const _set = new Set()
 const _weakset = new WeakSet()
 const _class = class {
-    protected _dummy = 0
-    constrctor() {
-        this._dummy = 1
-    }
+    protected _dummy = 1
 }
-const _classInstance = new _class() // Class instance should be of Object type.
+const _classInstance = new _class()
 const _promise = Promise.resolve()
 const _asyncFunction = async () => 1
 
@@ -100,7 +97,7 @@ describe('is', () => {
         expect(is.isObject(_set)).not.toBeTruthy()
         expect(is.isObject(_weakset)).not.toBeTruthy()
         expect(is.isObject(_class)).not.toBeTruthy()
-        expect(is.isObject(_classInstance)).toBeTruthy() // -----> true: class Instanc is an object
+        expect(is.isObject(_classInstance)).toBeTruthy() // -----> true: class instance is an object
         expect(is.isObject(_promise)).not.toBeTruthy()
         expect(is.isObject(_asyncFunction)).not.toBeTruthy()
     })
@@ -120,7 +117,6 @@ describe('is', () => {
         expect(is.isFunction(_set)).not.toBeTruthy()
         expect(is.isFunction(_weakset)).not.toBeTruthy()
         expect(is.isFunction(_class)).not.toBeTruthy()
-        expect(is.isFunction(_asyncFunction)).toBeTruthy()
         expect(is.isFunction(_classInstance)).not.toBeTruthy()
         expect(is.isFunction(_promise)).not.toBeTruthy()
         expect(is.isFunction(_asyncFunction)).toBeTruthy() // -----> true: async function is a function
@@ -149,7 +145,7 @@ describe('is', () => {
     test('Glob', () => {
         expect(is.isGlob('*.js')).toBeTruthy()
         expect(is.isGlob(['*.js', '*.ts'])).toBeTruthy()
-        expect(is.isGlob([])).toBeTruthy() // empty array should pass (every on empty is true)
+        expect(is.isGlob([])).toBeTruthy() // empty array passes (every on empty is vacuously true)
         expect(is.isGlob(['a', 1 as any])).not.toBeTruthy()
         expect(is.isGlob(123 as any)).not.toBeTruthy()
         expect(is.isGlob(null as any)).not.toBeTruthy()
@@ -397,9 +393,7 @@ describe('is', () => {
     })
 
     test('conditional async call', async () => {
-        let foo
         let result: number
-        type AsyncFunc = () => Promise<number>
 
         const f1 = async () =>
             new Promise<number>(resolve => {
@@ -407,7 +401,7 @@ describe('is', () => {
                     resolve(1)
                 }, 100)
             })
-        const f2 = () => 1 // This is an async function
+        const f2 = () => 1
 
         async function asyncFunc(func: () => Promise<number> | number) {
             if (is.isAsyncFunction(func)) {
